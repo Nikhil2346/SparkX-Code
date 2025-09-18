@@ -30,10 +30,10 @@
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.7);
-  display: none; /* hidden by default */
+  display: none;
   justify-content: center;
   align-items: center;
-  z-index: 10000; /* make sure it is above leaderboard */
+  z-index: 10000;
 }
 
 #transaction-modal.show {
@@ -84,11 +84,184 @@
   cursor: pointer;
 }
 
+/* News Ticker Styles */
+#news-ticker {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  background: linear-gradient(90deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+  border-top: 2px solid #ff4757;
+  z-index: 1000;
+  overflow: hidden;
+}
+.compRow button{ padding:6px 10px; border-radius:6px; font-weight:600; cursor:pointer; border:none; transition:0.3s; }
+.compRow .buy{ background:var(--accent); color:#000; }
+.compRow .buy:hover{ filter:brightness(1.1); }
+.compRow .sell{ background:var(--sell); color:#000; }
+.compRow .sell:hover{ filter:brightness(1.1); }
+
+.ticker-content {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.ticker-label {
+  background: #ff4757;
+  padding: 0 12px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  white-space: nowrap;
+  color: white;
+}
+
+.ticker-scroll {
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+}
+
+.ticker-text {
+  padding: 0 20px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  animation: scroll-left 60s linear infinite;
+}
+
+@keyframes scroll-left {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Headline Modal Styles */
+.headline-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  animation: modal-fade-in 0.3s ease-out;
+}
+
+.headline-modal.hidden {
+  display: none;
+}
+
+@keyframes modal-fade-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.headline-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  color: #333;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.2);
+  position: relative;
+}
+
+.headline-content h2 {
+  font-size: 24px;
+  margin: 0 0 16px 0;
+  color: #ff4757;
+  font-weight: 700;
+}
+
+.headline-content p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0 0 24px 0;
+  color: #555;
+}
+
+.headline-btn {
+  background: linear-gradient(45deg, #ff4757, #ff6b7a);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+  box-shadow: 0 4px 20px rgba(255, 71, 87, 0.3);
+  margin: 0 8px;
+}
+
+.headline-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 25px rgba(255, 71, 87, 0.4);
+}
+
+.headline-btn.secondary {
+  background: linear-gradient(45deg, #6c757d, #868e96);
+  box-shadow: 0 4px 20px rgba(108, 117, 125, 0.3);
+}
+
+.headline-btn.secondary:hover {
+  box-shadow: 0 6px 25px rgba(108, 117, 125, 0.4);
+}
+
+.endgame-content {
+  max-width: 600px;
+}
+
+.endgame-stats {
+  background: rgba(255, 71, 87, 0.1);
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.endgame-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* Crash Tint Overlay */
+.crash-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 0, 0, 0.15);
+  pointer-events: none;
+  z-index: 9998;
+  animation: crash-pulse 2s ease-out;
+}
+
+.crash-overlay.hidden {
+  display: none;
+}
+
+@keyframes crash-pulse {
+  0% { background: rgba(255, 0, 0, 0.25); }
+  50% { background: rgba(255, 0, 0, 0.1); }
+  100% { background: rgba(255, 0, 0, 0); }
+}
+
 *{ box-sizing:border-box; font-family:'Inter',sans-serif; margin:0; padding:0; }
 
 html, body, #app { height:100%; width:100%; background:var(--bg); color:var(--text); }
 
-#app{ display:flex; gap:20px; padding:20px; }
+#app{ display:flex; gap:20px; padding:20px; padding-bottom: 56px; /* Space for ticker */ }
 
 #left{ width:300px; display:flex; flex-direction:column; }
 
@@ -242,6 +415,48 @@ body.modal-open {
 }
 
 .compRow .price{ font-weight:600; font-size:14px; min-width:80px; }
+
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 8px;
+}
+
+.qty-btn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--text);
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  font-size: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.qty-btn:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.4);
+}
+
+.qty-btn:active {
+  transform: scale(0.95);
+}
+
+.qty-display {
+  min-width: 16px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  user-select: none;
+}
+
 .compRow button{ padding:6px 10px; border-radius:6px; font-weight:600; cursor:pointer; border:none; transition:0.3s; }
 .compRow .buy{ background:var(--accent); color:#000; }
 .compRow .buy:hover{ filter:brightness(1.1); }
@@ -256,20 +471,27 @@ body.modal-open {
 #nextDay:hover, #allGraphBtn:hover{ background:linear-gradient(45deg,#0055cc,var(--primary)); }
 
 #leaderboardWrap{
-
   margin-top:20px; background:var(--card); padding:12px; border-radius:10px; box-shadow:0 4px 10px var(--shadow);
 }
 #leaderboard th, #leaderboard td{ padding:8px; text-align:left; font-size:14px; }
 #leaderboard th{ color:var(--accent); font-weight:600; cursor:pointer; }
 #leaderboard tbody tr:nth-child(even){ background: rgba(255,255,255,0.05); }
 #leaderboard tbody tr:hover{ background: rgba(0,204,102,0.1); cursor:pointer; }
-/* make leaderboard names look clickable */
-#leaderboard .leader-user{
+.leader-user{
   cursor: pointer;
   color: var(--primary);
   font-weight: 600;
 }
 
+.profit-positive {
+  color: #00ff88;
+  font-weight: 600;
+}
+
+.profit-negative {
+  color: #ff5555;
+  font-weight: 600;
+}
 
 #resetLeaderboard{
   margin-top:10px; padding:8px; width:100%; border:none; border-radius:6px; background:#ff4444; color:#fff; font-weight:600; cursor:pointer; transition:0.3s;
@@ -329,9 +551,8 @@ canvas{ width:100%; height:100%; }
     <button id="allGraphBtn">Show All Companies</button>
 
     <div id="leaderboardWrap">
-      
       <table id="leaderboard">
-        <thead><tr><th>User</th><th>Net Worth</th></tr></thead>
+        <thead><tr><th>User</th><th>Profit/Loss</th></tr></thead>
         <tbody></tbody>
       </table>
       <button id="resetLeaderboard">Reset Leaderboard</button>
@@ -351,6 +572,25 @@ canvas{ width:100%; height:100%; }
   </main>
 </div>
 
+<!-- Transaction Modal -->
+<div id="transaction-modal" class="modal-overlay hidden" role="dialog" aria-hidden="true">
+  <div class="modal-content" role="document" aria-modal="true">
+    <button id="modal-close" class="modal-close" aria-label="Close">&times;</button>
+    <h2>Transactions for <span id="modal-user"></span></h2>
+    <table id="transaction-table" style="width:100%; border-collapse:collapse;">
+      <thead>
+        <tr>
+          <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Stock Name</th>
+          <th style="text-align:right; padding:8px; border-bottom:1px solid #ddd;">Units</th>
+          <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<script src="scenario.js"></script>
 <script>
 // ----- Configuration -----
 const COMPANIES = {
@@ -385,13 +625,11 @@ function applyScenarioCrash(multiplier = 0.5) {
   for (const c in COMPANIES) {
     if (!Array.isArray(history[c]) || history[c].length === 0) continue;
     
-    // Apply crash to the latest price
     const lastIndex = history[c].length - 1;
     const originalPrice = history[c][lastIndex];
     const crashedPrice = +(originalPrice * multiplier).toFixed(2);
     history[c][lastIndex] = crashedPrice;
 
-    // Update OHLC data
     if (Array.isArray(ohlc[c]) && ohlc[c].length > 0) {
       const lastOhlcIndex = ohlc[c].length - 1;
       const prevClose = lastOhlcIndex > 0 ? ohlc[c][lastOhlcIndex - 1].c : crashedPrice;
@@ -399,26 +637,30 @@ function applyScenarioCrash(multiplier = 0.5) {
       ohlc[c][lastOhlcIndex] = {
         o: prevClose,
         h: Math.max(prevClose, crashedPrice) + Math.random() * 5,
-        l: Math.min(prevClose, crashedPrice) - Math.random() * 10, // Bigger drops
+        l: Math.min(prevClose, crashedPrice) - Math.random() * 10,
         c: crashedPrice
       };
     }
   }
   
-  // Refresh UI if the function exists
   if (typeof refreshUI === 'function') {
     refreshUI();
   }
 }
 
+// Make applyMarketShock available globally for scenario.js
+window.applyMarketShock = applyScenarioCrash;
+
 // ----- State -----
 let history={}, shares={}, balance=START_BALANCE, dayPlayed=0, user=null, currentCompany=null, ohlc={}, tradeHistory={};
 let leaderboard = JSON.parse(localStorage.getItem('lb')||'{}');
+let tradeQuantities = {}; // Track quantity for each company
 
 // Initialize data
 for(const k in COMPANIES){ 
   history[k] = initHistory(COMPANIES[k]); 
   shares[k] = 0; 
+  tradeQuantities[k] = 1; // Initialize trade quantity to 1
   ohlc[k] = history[k].map((p,i)=>{
     const prev = i===0? p : history[k][i-1];
     return {o:prev, h:Math.max(prev,p)+Math.random()*5, l:Math.min(prev,p)-Math.random()*5, c:p};
@@ -451,6 +693,31 @@ function buildCompanyRows(){
     price.dataset.company=c; 
     price.textContent = history[c][history[c].length-1].toFixed(2);
 
+    // Quantity controls
+    const qtyControls = document.createElement('div');
+    qtyControls.className = 'qty-controls';
+    
+    const downBtn = document.createElement('button');
+    downBtn.className = 'qty-btn';
+    downBtn.textContent = '▼';
+    downBtn.addEventListener('click', () => decreaseQuantity(c));
+    
+    const qtyDisplay = document.createElement('span');
+    qtyDisplay.className = 'qty-display';
+    qtyDisplay.id = `qty-${c}`;
+    qtyDisplay.textContent = tradeQuantities[c] || 1;
+    
+    const upBtn = document.createElement('button');
+    upBtn.className = 'qty-btn';
+    upBtn.textContent = '▲';
+    upBtn.addEventListener('click', () => increaseQuantity(c));
+    
+    qtyControls.append(downBtn, qtyDisplay, upBtn);
+
+    // Trade buttons container
+    const tradeButtons = document.createElement('div');
+    tradeButtons.className = 'trade-buttons';
+
     const buy = document.createElement('button'); 
     buy.className='buy'; 
     buy.textContent='Buy'; 
@@ -461,21 +728,116 @@ function buildCompanyRows(){
     sell.textContent='Sell'; 
     sell.addEventListener('click',()=>trade(c,false));
 
+    tradeButtons.append(buy, sell);
+
     const sh = document.createElement('div');
     sh.className = 'shares';
     sh.id = `shares-${c}`;
     sh.textContent = shares[c];
 
-    row.append(colorBox,abbr,price,buy,sell,sh);
+    row.append(colorBox, abbr, price, qtyControls, tradeButtons, sh);
     companyList.append(row);
     i++;
   }
 }
 
+// ----- Quantity Control Functions -----
+function increaseQuantity(company) {
+  if (!user) return; // Only allow changes after game starts
+  
+  const currentPrice = history[company][history[company].length - 1];
+  const maxAffordable = Math.floor(balance / currentPrice);
+  
+  if (tradeQuantities[company] < maxAffordable) {
+    tradeQuantities[company]++;
+    updateQuantityDisplay(company);
+  }
+}
+
+function decreaseQuantity(company) {
+  if (!user) return; // Only allow changes after game starts
+  
+  if (tradeQuantities[company] > 1) {
+    tradeQuantities[company]--;
+    updateQuantityDisplay(company);
+  }
+}
+
+function updateQuantityDisplay(company) {
+  const qtyEl = document.getElementById(`qty-${company}`);
+  if (qtyEl) {
+    qtyEl.textContent = tradeQuantities[company];
+  }
+}
+
+function validateAndAdjustQuantities() {
+  // Adjust quantities based on current affordability and holdings
+  for (const company in tradeQuantities) {
+    const currentPrice = history[company][history[company].length - 1];
+    const maxAffordable = Math.floor(balance / currentPrice);
+    
+    // Ensure quantity doesn't exceed what user can afford
+    if (tradeQuantities[company] > maxAffordable && maxAffordable > 0) {
+      tradeQuantities[company] = maxAffordable;
+      updateQuantityDisplay(company);
+    }
+    
+    // Reset to 1 if user can't afford any
+    if (maxAffordable === 0) {
+      tradeQuantities[company] = 1;
+      updateQuantityDisplay(company);
+    }
+  }
+}
+function calculateNetWorth() {
+  const stockValue = Object.keys(shares).reduce((sum, company) => {
+    return sum + (shares[company] * history[company][history[company].length - 1]);
+  }, 0);
+  return balance + stockValue;
+}
+
+// ----- Calculate Profit/Loss -----
+function calculateProfitLoss() {
+  return calculateNetWorth() - START_BALANCE;
+}
+
+// ----- Auto-Sell All Stocks -----
+function autoSellAllStocks() {
+  console.log('Auto-selling all stocks at day 20...');
+  
+  for (const company in shares) {
+    const quantity = shares[company];
+    if (quantity > 0) {
+      const currentPrice = history[company][history[company].length - 1];
+      const saleValue = currentPrice * quantity;
+      
+      // Add to balance
+      balance += saleValue;
+      
+      // Record transaction
+      if (!tradeHistory[user]) tradeHistory[user] = [];
+      tradeHistory[user].push({
+        type: "AUTO-SELL", 
+        company: company, 
+        price: currentPrice, 
+        qty: quantity, 
+        day: dayPlayed
+      });
+      
+      // Clear shares
+      shares[company] = 0;
+      
+      console.log(`Auto-sold ${quantity} shares of ${company} at $${currentPrice.toFixed(2)} each`);
+    }
+  }
+  
+  refreshUI();
+}
+
 // ----- Refresh UI -----
 function refreshUI(){
   dayLbl.textContent = `Day ${dayPlayed} / ${TOTAL_DAYS}`;
-  balLbl.textContent = `Balance: $${balance.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  balLbl.textContent = `Balance: ${balance.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`;
   
   for(const c in COMPANIES){
     const el = document.querySelector(`.price[data-company="${c}"]`);
@@ -489,89 +851,56 @@ function refreshUI(){
     
     const shEl = document.getElementById(`shares-${c}`);
     if(shEl) shEl.textContent = shares[c];
+    
+    // Update quantity display
+    updateQuantityDisplay(c);
+  }
+  
+  // Validate and adjust quantities based on current balance
+  if (user) {
+    validateAndAdjustQuantities();
   }
   
   drawChart(); 
+  updateLeaderboard();
+}
+
+// ----- Update Leaderboard with Profit/Loss -----
+function updateLeaderboard() {
+  if (user) {
+    const profitLoss = calculateProfitLoss();
+    leaderboard[user] = profitLoss;
+    localStorage.setItem('lb', JSON.stringify(leaderboard));
+  }
   refreshLeader();
 }
 
 // ----- Refresh Leaderboard -----
-// ----- Refresh Leaderboard -----
 function refreshLeader(){
   leaderboardBody.innerHTML = '';
-
   const arr = Object.entries(leaderboard).sort((a,b)=>b[1]-a[1]);
 
-  for(const [u,w] of arr){
+  for(const [u,profitLoss] of arr){
     const tr = document.createElement('tr');
-
-    // User cell with span (clickable)
     const tdUser = document.createElement('td');
     const span = document.createElement('span');
     span.className = 'leader-user';
-    span.dataset.username = u;        // <-- this is the important part
+    span.dataset.username = u;
     span.textContent = u;
     span.style.cursor = 'pointer';
     tdUser.appendChild(span);
 
-    // Net worth cell
-    const tdNet = document.createElement('td');
-    tdNet.textContent = `$${w.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+    const tdProfit = document.createElement('td');
+    const profitClass = profitLoss >= 0 ? 'profit-positive' : 'profit-negative';
+    const profitSign = profitLoss >= 0 ? '+' : '';
+    tdProfit.className = profitClass;
+    tdProfit.textContent = `${profitSign}$${profitLoss.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`;
 
     tr.appendChild(tdUser);
-    tr.appendChild(tdNet);
+    tr.appendChild(tdProfit);
     leaderboardBody.appendChild(tr);
   }
 }
-
-
-// ----- Open History -----
-function openHistory(username) {
-  const modal = document.getElementById('transaction-modal');
-  const modalUser = document.getElementById('modal-user');
-  const tableBody = document.querySelector('#transaction-table tbody');
-
-  modalUser.textContent = username;
-  tableBody.innerHTML = '';
-
-  const transactions = tradeHistory[username] || [];
-
-  if (transactions.length === 0) {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td colspan="3" style="padding:8px; text-align:center;">No transactions found</td>`;
-    tableBody.appendChild(tr);
-  } else {
-    // --- group by (company + action) ---
-    const grouped = {};
-
-    transactions.forEach(tx => {
-      const key = `${tx.company}_${tx.type}`; // e.g. "Nvidia_BUY"
-      if (!grouped[key]) {
-        grouped[key] = {
-          company: tx.company,
-          action: tx.type,
-          units: 0
-        };
-      }
-      grouped[key].units += tx.qty;
-    });
-
-    // --- build rows from grouped data ---
-    Object.values(grouped).forEach(entry => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${entry.company}</td>
-        <td style="text-align:right;">${entry.units}</td>
-        <td style="color:${entry.action === 'BUY' ? 'limegreen' : 'red'};">${entry.action}</td>
-      `;
-      tableBody.appendChild(tr);
-    });
-  }
-
-  modal.classList.add('show');
-}
-
-
 
 // ----- Start Game -----
 function startGame(){
@@ -582,10 +911,16 @@ function startGame(){
   username.disabled = true; 
   startBtn.disabled = true;
   
-  if(!(user in leaderboard)) leaderboard[user] = balance;
+  if(!(user in leaderboard)) leaderboard[user] = 0; // Initialize with 0 profit/loss
   if(!(user in tradeHistory)) tradeHistory[user] = [];
   
   localStorage.setItem('lb', JSON.stringify(leaderboard));
+  
+  // Initialize scenario system
+  if (typeof initScenarioSystem === 'function') {
+    initScenarioSystem();
+  }
+  
   refreshUI();
 }
 
@@ -593,21 +928,32 @@ function startGame(){
 function trade(comp, buy){
   if(!user){ alert('Start the simulation first'); return; }
   
-  const qty = 1; 
+  const qty = tradeQuantities[comp] || 1;
   const price = history[comp][history[comp].length-1];
   
   if(buy){ 
-    if(balance < price * qty){ alert('Insufficient funds'); return; } 
-    balance -= price * qty; 
+    const totalCost = price * qty;
+    if(balance < totalCost){ 
+      alert(`Insufficient funds. Need ${totalCost.toFixed(2)} but only have ${balance.toFixed(2)}`); 
+      return; 
+    } 
+    balance -= totalCost; 
     shares[comp] += qty; 
     tradeHistory[user].push({type:"BUY", company:comp, price, qty, day:dayPlayed});
   }
   else{ 
-    if(shares[comp] < qty){ alert('Not enough shares'); return; } 
+    if(shares[comp] < qty){ 
+      alert(`Not enough shares. You have ${shares[comp]} but trying to sell ${qty}`); 
+      return; 
+    } 
     balance += price * qty; 
     shares[comp] -= qty; 
     tradeHistory[user].push({type:"SELL", company:comp, price, qty, day:dayPlayed});
   } 
+  
+  // Reset quantity to 1 after trade
+  tradeQuantities[comp] = 1;
+  updateQuantityDisplay(comp);
   
   refreshUI();
 }
@@ -617,6 +963,10 @@ function nextDay(){
   if(!user){ alert('Start the simulation first'); return; }
   if(dayPlayed >= TOTAL_DAYS){ finish(); return; }
   
+  // Increment day first
+  dayPlayed++;
+  
+  // Apply market changes
   for(const c in COMPANIES){
     const last = history[c][history[c].length-1];
     const newPrice = rndDelta(last);
@@ -630,32 +980,43 @@ function nextDay(){
     });
   }
   
-  dayPlayed++;
   refreshUI();
+  
+  // Auto-sell all stocks at day 20 before finishing
+  if (dayPlayed >= TOTAL_DAYS) {
+    autoSellAllStocks();
+    setTimeout(() => {
+      finish();
+    }, 500); // Small delay to show the auto-sell effect
+    return;
+  }
+  
+  // Check for crisis events (after UI refresh)
+  if (typeof checkCrisisEvent === 'function') {
+    checkCrisisEvent(dayPlayed);
+  }
 }
 
+// ----- Finish Game -----
 function finish() {
-    let leaderboard = Object.entries(users).map(([username, money]) => {
-        return { user: username, money: money };
-    });
-
-    leaderboard.sort((a, b) => b.money - a.money);
-
-    // ✅ Save final stock prices
-    localStorage.setItem("finalPrices", JSON.stringify(
-        Object.fromEntries(
-            Object.keys(COMPANIES).map(c => [c, history[c][history[c].length - 1]])
-        )
-    ));
-
-    // ✅ Save the leaderboard too (optional, if you want to use it in history.html)
-    localStorage.setItem("finalLeaderboard", JSON.stringify(leaderboard));
-
-    // ✅ Redirect to history.html (instead of alert)
-    window.location.href = "history.html";
+  const finalProfitLoss = calculateProfitLoss();
+  
+  // Update leaderboard with final profit/loss
+  leaderboard[user] = finalProfitLoss;
+  localStorage.setItem('lb', JSON.stringify(leaderboard));
+  refreshLeader();
+  
+  // Show endgame message with scenario system
+  if (typeof showEndgameMessage === 'function') {
+    setTimeout(() => {
+      showEndgameMessage(balance, finalProfitLoss); // Pass both balance and profit/loss
+    }, 500);
+  } else {
+    // Fallback if scenario system not loaded
+    const profitSign = finalProfitLoss >= 0 ? '+' : '';
+    alert(`Game Over! Final Balance: ${balance.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}\nProfit/Loss: ${profitSign}${finalProfitLoss.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}`);
+  }
 }
-
-
 
 // ----- Draw Chart -----
 function drawChart(){
@@ -692,6 +1053,7 @@ function drawChart(){
         borderColor: COLORS[i % COLORS.length], 
         backgroundColor: 'transparent', 
         tension: 0.15 
+        
       });
       i++;
     }
@@ -708,8 +1070,11 @@ function drawChart(){
           position: 'right', 
           labels: {
             boxWidth: 10,
-            font: {size: 10}
-          }
+            font: {size: 15},
+            color : "white",
+            usePointStyle: true,  
+            pointStyle: 'rect'    
+        }
         } 
       },
       scales: { 
@@ -773,35 +1138,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Modal event listeners
   if (startBtn && modal && modalStart && modalClose) {
-    // Start button opens modal instead of starting game directly
     startBtn.addEventListener('click', function(e) {
       e.preventDefault();
       showModal();
     });
 
-    // Modal "Start Crisis" button
     modalStart.addEventListener('click', function() {
       hideModal();
-      
-      // Apply 2008 crash (50% price drop)
       applyScenarioCrash(0.5);
-      
-      // Start the game
       startGame();
     });
 
-    // Modal close buttons
     modalClose.addEventListener('click', hideModal);
     if (modalCancel) {
       modalCancel.addEventListener('click', hideModal);
     }
 
-    // Close on overlay click
     modal.addEventListener('click', (e) => {
       if (e.target === modal) hideModal();
     });
 
-    // Close on Escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && modal.classList.contains('show')) {
         hideModal();
@@ -826,36 +1182,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Username enter key
   username.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
       startBtn.click();
     }
   });
 });
-
 </script>
-<!-- ========== Transaction modal (paste near end of <body>) ========== -->
-<div id="transaction-modal" class="modal-overlay hidden" role="dialog" aria-hidden="true">
-  <div class="modal-content" role="document" aria-modal="true">
-    <button id="modal-close" class="modal-close" aria-label="Close">&times;</button>
-    <h2>Transactions for <span id="modal-user"></span></h2>
-
-    <table id="transaction-table" style="width:100%; border-collapse:collapse;">
-      <thead>
-        <tr>
-          <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Stock Name</th>
-          <th style="text-align:right; padding:8px; border-bottom:1px solid #ddd;">Units</th>
-          <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- rows will be added here by JavaScript -->
-      </tbody>
-    </table>
-  </div>
-</div>
-<!-- ========== end modal ========== -->
 <script src="transactions.js"></script>
 </body>
 </html>
